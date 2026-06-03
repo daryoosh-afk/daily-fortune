@@ -67,6 +67,7 @@ const resultFields = {
 const colors = ["ラベンダー", "月白", "ローズピンク", "星の金色", "ミルキーパープル", "淡い水色", "すみれ色", "シャンパン", "クリーム", "夜空の紺"];
 const actions = ["深呼吸してから始める", "一つだけ片付ける", "短いメモを書く", "好きな飲み物を選ぶ", "予定を一つ確認する", "早めに休む", "やさしい言葉を選ぶ", "小さなごほうびを用意する"];
 const storageKey = "dailyFortuneDraw";
+const streakKey = "dailyFortuneStreak";
 
 const form = document.querySelector("#fortuneForm");
 const nameInput = document.querySelector("#nameInput");
@@ -75,7 +76,10 @@ const formNote = document.querySelector("#formNote");
 const copyButton = document.querySelector("#copyButton");
 const shareButton = document.querySelector("#shareButton");
 const countdownText = document.querySelector("#countdownText");
+const fortuneCard = document.querySelector(".fortune-card");
 const dateLine = document.querySelector("#dateLine");
+const streakCount = document.querySelector("#streakCount");
+const streakMessage = document.querySelector("#streakMessage");
 const scoreValue = document.querySelector("#scoreValue");
 const categoryText = document.querySelector("#categoryText");
 const fortuneTitle = document.querySelector("#fortuneTitle");
@@ -108,6 +112,16 @@ function nextMidnight() {
   return next;
 }
 
+function dateFromKey(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function daysBetween(previousDate, currentDate) {
+  const dayLength = 86400000;
+  return Math.round((dateFromKey(currentDate).getTime() - dateFromKey(previousDate).getTime()) / dayLength);
+}
+
 function updateCountdown() {
   const remaining = Math.max(0, nextMidnight().getTime() - Date.now());
   const hours = Math.floor(remaining / 3600000);
@@ -133,11 +147,91 @@ function pick(seed, list, offset = 0) {
   return list[(seed >>> offset) % list.length];
 }
 
+function loadStreak() {
+  try {
+    const streak = JSON.parse(localStorage.getItem(streakKey));
+    if (streak && Number.isInteger(streak.count) && streak.lastDate) {
+      return streak;
+    }
+  } catch (error) {
+    localStorage.removeItem(streakKey);
+  }
+
+  return { count: 0, lastDate: "" };
+}
+
+function updateStreakForDraw(date) {
+  const streak = loadStreak();
+  let count = 1;
+
+  if (streak.lastDate === date) {
+    count = streak.count;
+  } else if (streak.lastDate && daysBetween(streak.lastDate, date) === 1) {
+    count = streak.count + 1;
+  }
+
+  const nextStreak = { count, lastDate: date };
+  localStorage.setItem(streakKey, JSON.stringify(nextStreak));
+  return nextStreak;
+}
+
+function streakTier(count) {
+  if (count >= 30) {
+    return "legend";
+  }
+
+  if (count >= 14) {
+    return "moon";
+  }
+
+  if (count >= 7) {
+    return "gold";
+  }
+
+  if (count >= 3) {
+    return "glow";
+  }
+
+  return "seed";
+}
+
+function streakCopy(count) {
+  if (count >= 30) {
+    return "30日連続。特別な星のカードが開きました。";
+  }
+
+  if (count >= 14) {
+    return "14日連続。月明かりのカードに育っています。";
+  }
+
+  if (count >= 7) {
+    return "7日連続。カードに金色の縁がつきました。";
+  }
+
+  if (count >= 3) {
+    return "3日連続。星が少し強く輝き始めました。";
+  }
+
+  if (count >= 1) {
+    return "明日の星も待っています。";
+  }
+
+  return "星を集めると、カードが少しずつ輝きます。";
+}
+
+function renderStreak(count) {
+  const tier = streakTier(count);
+  streakCount.textContent = count;
+  streakMessage.textContent = streakCopy(count);
+  fortuneCard.dataset.streakTier = tier;
+}
+
 function createReading(name) {
   const date = todayKey();
   const normalizedName = name.trim() || "ゲスト";
   const baseSeed = hashText(`${date}|${normalizedName.toLowerCase()}`);
   const results = {};
+  const streak = updateStreakForDraw(date);
 
   Object.keys(fortunes).forEach((key, index) => {
     const seed = hashText(`${date}|${normalizedName.toLowerCase()}|${key}|${index}`);
@@ -152,11 +246,13 @@ function createReading(name) {
     color: pick(baseSeed, colors, 7),
     number: 1 + ((baseSeed >>> 4) % 99),
     action: pick(baseSeed, actions, 11),
+    streak: streak.count,
     results
   };
 }
 
 function renderReading(reading) {
+  renderStreak(reading.streak || loadStreak().count);
   scoreValue.textContent = reading.score;
   categoryText.textContent = `${reading.name}さんの今日の運勢`;
   fortuneTitle.textContent = reading.results.general.title;
@@ -210,6 +306,7 @@ function loadReading() {
 function buildShareText() {
   return [
     `【今日の運勢】${categoryText.textContent}`,
+    `連続占い: ${streakCount.textContent}日`,
     `スコア: ${scoreValue.textContent}`,
     `総合運: ${resultFields.general.title.textContent} ${resultFields.general.copy.textContent}`,
     `仕事運: ${resultFields.work.title.textContent} ${resultFields.work.copy.textContent}`,
@@ -282,6 +379,7 @@ shareButton.addEventListener("click", async () => {
 });
 
 displayDate();
+renderStreak(loadStreak().count);
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
