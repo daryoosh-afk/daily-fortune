@@ -1,0 +1,349 @@
+:root {
+  color-scheme: light;
+  --ink: #18212f;
+  --muted: #667085;
+  --line: #d7dce4;
+  --surface: #ffffff;
+  --panel: #f6f4ef;
+  --accent: #7c3f58;
+  --accent-dark: #623043;
+  --gold: #c5922a;
+  --moss: #4f6f52;
+  --shadow: 0 18px 50px rgba(24, 33, 47, 0.14);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(120deg, rgba(79, 111, 82, 0.12), transparent 36%),
+    linear-gradient(240deg, rgba(124, 63, 88, 0.12), transparent 34%),
+    var(--panel);
+  color: var(--ink);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+
+.workspace {
+  width: min(960px, 100%);
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.topbar,
+.control-panel,
+.fortune-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.topbar {
+  grid-column: 1 / -1;
+  min-height: 92px;
+  border-radius: 8px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.countdown-pill {
+  min-width: 138px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 10px 12px;
+  text-align: right;
+}
+
+.countdown-pill span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.countdown-pill strong {
+  display: block;
+  margin-top: 2px;
+  color: var(--accent-dark);
+  font-size: 1.15rem;
+}
+
+.eyebrow {
+  margin: 0 0 5px;
+  color: var(--moss);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 0.95;
+}
+
+.icon-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--accent-dark);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.control-panel {
+  border-radius: 8px;
+  padding: 18px;
+}
+
+label,
+legend {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+input[type="text"] {
+  min-width: 0;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--ink);
+  background: #fbfcfd;
+}
+
+button,
+.actions a {
+  min-height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  font-weight: 800;
+  padding: 0 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover,
+.actions a:hover {
+  background: var(--accent-dark);
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.form-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.fortune-card {
+  min-height: 520px;
+  border-radius: 8px;
+  padding: clamp(22px, 4vw, 34px);
+  display: flex;
+  flex-direction: column;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin: 18px 0 0;
+}
+
+.date-line,
+.category,
+.detail-grid span,
+.result-card span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.score-ring {
+  width: 112px;
+  height: 112px;
+  border: 10px solid rgba(79, 111, 82, 0.18);
+  border-top-color: var(--gold);
+  border-right-color: var(--accent);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+}
+
+.score-ring span {
+  font-size: 2.1rem;
+  font-weight: 900;
+}
+
+.category {
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+h2 {
+  margin-bottom: 12px;
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+
+.fortune-copy {
+  color: #344054;
+  font-size: 1.04rem;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.detail-grid div {
+  min-height: 92px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfcfd;
+}
+
+.detail-grid strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
+.result-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.result-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+}
+
+.result-card h3 {
+  margin: 8px 0;
+  color: var(--accent-dark);
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.result-card p {
+  margin-bottom: 0;
+  color: #344054;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.actions button,
+.actions a {
+  width: 100%;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    min-height: 80px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .fortune-card {
+    min-height: 0;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-list {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .score-row {
+    grid-template-columns: 1fr;
+  }
+}
