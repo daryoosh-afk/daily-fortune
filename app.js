@@ -9,6 +9,16 @@ const fortunes = {
     ["見直しに向いています。", "一度立ち止まって確認すると、見落としていた良い点や改善点に気づけそうです。"],
     ["穏やかな変化の兆しです。", "いつも通りの中に少しだけ新しい工夫を入れると、気分が前向きになります。"]
   ],
+  mood: [
+    ["気持ちに余白が生まれます。", "少し深く息をするだけで、考えすぎていたことがほどけやすくなります。"],
+    ["小さな安心を拾える日です。", "完璧な一日を目指すより、ほっとできる瞬間を一つ見つけると気分が整います。"],
+    ["やさしい切り替えが合います。", "疲れを感じたら無理に押し切らず、場所や飲み物を変えるだけでも流れが変わります。"],
+    ["自分を責めないほど吉です。", "できなかったことより、できたことを一つ数えると心が軽くなります。"],
+    ["気分の整理に向いています。", "頭の中で抱えたままにせず、短い言葉にして出すと落ち着きやすくなります。"],
+    ["静かな時間が味方です。", "数分だけでも一人で整える時間を作ると、その後の判断がやわらかくなります。"],
+    ["前向きさが戻りやすい日です。", "小さな達成感を先に作ると、次の行動へ自然に進みやすくなります。"],
+    ["心の温度を上げる日です。", "好きなものに少し触れるだけで、今日の気分がやさしく持ち上がります。"]
+  ],
   work: [
     ["一つに絞ると進みます。", "あれもこれも抱えるより、今日いちばん大事な作業を一つ決めると集中しやすくなります。"],
     ["確認が味方になる日です。", "送る前、決める前、進める前に一度見直すことで、小さな不安を減らせます。"],
@@ -42,8 +52,8 @@ const fortunes = {
 };
 
 const resultFields = {
-  general: {
-    label: "総合運",
+  mood: {
+    label: "気分運",
     title: document.querySelector("#generalTitle"),
     copy: document.querySelector("#generalCopy")
   },
@@ -73,7 +83,6 @@ const form = document.querySelector("#fortuneForm");
 const nameInput = document.querySelector("#nameInput");
 const drawButton = document.querySelector("#drawButton");
 const formNote = document.querySelector("#formNote");
-const copyButton = document.querySelector("#copyButton");
 const shareButton = document.querySelector("#shareButton");
 const countdownText = document.querySelector("#countdownText");
 const fortuneCard = document.querySelector(".fortune-card");
@@ -274,7 +283,6 @@ function lockForToday(reading) {
   drawButton.disabled = true;
   drawButton.textContent = "今日は占い済み";
   formNote.textContent = "次に占える時間まで、今日の結果を見返せます。";
-  copyButton.disabled = false;
   shareButton.disabled = false;
   renderReading(reading);
 }
@@ -308,7 +316,7 @@ function buildShareText() {
     `【今日の運勢】${categoryText.textContent}`,
     `連続占い: ${streakCount.textContent}日`,
     `スコア: ${scoreValue.textContent}`,
-    `総合運: ${resultFields.general.title.textContent} ${resultFields.general.copy.textContent}`,
+    `気分運: ${resultFields.mood.title.textContent} ${resultFields.mood.copy.textContent}`,
     `仕事運: ${resultFields.work.title.textContent} ${resultFields.work.copy.textContent}`,
     `恋愛運: ${resultFields.love.title.textContent} ${resultFields.love.copy.textContent}`,
     `金運: ${resultFields.money.title.textContent} ${resultFields.money.copy.textContent}`,
@@ -341,20 +349,6 @@ form.addEventListener("submit", (event) => {
   lockForToday(reading);
 });
 
-copyButton.addEventListener("click", async () => {
-  if (!navigator.clipboard) {
-    setTemporaryButtonText(copyButton, "コピー不可");
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(buildShareText());
-    setTemporaryButtonText(copyButton, "コピー済み");
-  } catch (error) {
-    setTemporaryButtonText(copyButton, "失敗");
-  }
-});
-
 shareButton.addEventListener("click", async () => {
   const text = buildShareText();
 
@@ -369,13 +363,7 @@ shareButton.addEventListener("click", async () => {
     }
   }
 
-  if (navigator.clipboard) {
-    await navigator.clipboard.writeText(text);
-    setTemporaryButtonText(shareButton, "コピー済み");
-    return;
-  }
-
-  setTemporaryButtonText(shareButton, "未対応");
+  setTemporaryButtonText(shareButton, "共有未対応");
 });
 
 displayDate();
@@ -388,6 +376,5 @@ if (savedReading) {
   lockForToday(savedReading);
 } else {
   unlockForNewDay();
-  copyButton.disabled = true;
   shareButton.disabled = true;
 }
