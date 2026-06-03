@@ -34,7 +34,15 @@
         </form>
 
         <article class="fortune-card" aria-live="polite">
-          <div class="date-line" id="dateLine"></div>
+          <div class="card-header">
+            <div>
+              <div class="date-line" id="dateLine"></div>
+              <p class="streak-message" id="streakMessage">星を集めると、カードが少しずつ輝きます。</p>
+            </div>
+            <div class="star-streak" aria-label="連続占い日数">
+              <span id="streakCount">0</span>
+            </div>
+          </div>
           <div class="score-row">
             <div class="score-ring" aria-label="総合スコア">
               <span id="scoreValue">--</span>
