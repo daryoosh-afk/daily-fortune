@@ -1,15 +1,16 @@
 :root {
   color-scheme: light;
   --ink: #18212f;
-  --muted: #667085;
-  --line: #d7dce4;
+  --muted: #74667f;
+  --line: #e1d8ec;
   --surface: #ffffff;
-  --panel: #f6f4ef;
-  --accent: #7c3f58;
-  --accent-dark: #623043;
-  --gold: #c5922a;
-  --moss: #4f6f52;
-  --shadow: 0 18px 50px rgba(24, 33, 47, 0.14);
+  --panel: #f8f2ff;
+  --accent: #7a3db8;
+  --accent-dark: #4c2577;
+  --pink: #e45a9a;
+  --gold: #d9a441;
+  --lavender: #a98bd8;
+  --shadow: 0 18px 50px rgba(76, 37, 119, 0.16);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -21,8 +22,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(120deg, rgba(79, 111, 82, 0.12), transparent 36%),
-    linear-gradient(240deg, rgba(124, 63, 88, 0.12), transparent 34%),
+    linear-gradient(120deg, rgba(122, 61, 184, 0.14), transparent 38%),
+    linear-gradient(240deg, rgba(228, 90, 154, 0.13), transparent 36%),
+    linear-gradient(180deg, #fff9fd 0%, transparent 48%),
     var(--panel);
   color: var(--ink);
 }
@@ -50,7 +52,7 @@ input {
 .topbar,
 .control-panel,
 .fortune-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
@@ -70,7 +72,7 @@ input {
   min-width: 138px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #fbfcfd;
+  background: #fff9fd;
   padding: 10px 12px;
   text-align: right;
 }
@@ -85,13 +87,13 @@ input {
 .countdown-pill strong {
   display: block;
   margin-top: 2px;
-  color: var(--accent-dark);
+  color: var(--accent);
   font-size: 1.15rem;
 }
 
 .eyebrow {
   margin: 0 0 5px;
-  color: var(--moss);
+  color: var(--pink);
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -105,6 +107,7 @@ p {
 
 h1 {
   margin-bottom: 0;
+  color: var(--accent-dark);
   font-size: clamp(2rem, 5vw, 3.25rem);
   line-height: 0.95;
 }
@@ -146,7 +149,7 @@ input[type="text"] {
   border-radius: 8px;
   padding: 0 12px;
   color: var(--ink);
-  background: #fbfcfd;
+  background: #fff9fd;
 }
 
 button,
@@ -154,7 +157,7 @@ button,
   min-height: 44px;
   border: 0;
   border-radius: 8px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--pink));
   color: white;
   font-weight: 800;
   padding: 0 16px;
@@ -167,7 +170,7 @@ button,
 
 button:hover,
 .actions a:hover {
-  background: var(--accent-dark);
+  background: linear-gradient(135deg, var(--accent-dark), #b93b78);
 }
 
 button:disabled,
@@ -211,15 +214,17 @@ input:disabled {
 .score-ring {
   width: 112px;
   height: 112px;
-  border: 10px solid rgba(79, 111, 82, 0.18);
+  border: 10px solid rgba(169, 139, 216, 0.24);
   border-top-color: var(--gold);
-  border-right-color: var(--accent);
+  border-right-color: var(--pink);
+  border-bottom-color: var(--accent);
   border-radius: 999px;
   display: grid;
   place-items: center;
 }
 
 .score-ring span {
+  color: var(--accent-dark);
   font-size: 2.1rem;
   font-weight: 900;
 }
@@ -256,7 +261,7 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 12px;
-  background: #fbfcfd;
+  background: #fff9fd;
 }
 
 .detail-grid strong {
@@ -276,7 +281,7 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 14px;
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #fff9fd 100%);
 }
 
 .result-card h3 {
