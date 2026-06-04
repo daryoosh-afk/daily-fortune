@@ -78,6 +78,7 @@ const colors = ["ラベンダー", "月白", "ローズピンク", "星の金色
 const actions = ["深呼吸してから始める", "一つだけ片付ける", "短いメモを書く", "好きな飲み物を選ぶ", "予定を一つ確認する", "早めに休む", "やさしい言葉を選ぶ", "小さなごほうびを用意する"];
 const storageKey = "dailyFortuneDraw";
 const streakKey = "dailyFortuneStreak";
+const shareUrl = "https://daryoosh-afk.github.io/daily-fortune/";
 
 const form = document.querySelector("#fortuneForm");
 const nameInput = document.querySelector("#nameInput");
@@ -261,6 +262,22 @@ function renderStreak(count) {
   fortuneCard.dataset.streakTier = tier;
 }
 
+function renderEmptyState() {
+  fortuneCard.dataset.cardState = "empty";
+  scoreValue.textContent = "★";
+  categoryText.textContent = "今日の星";
+  fortuneTitle.textContent = "今日の星をひらきましょう。";
+  fortuneCopy.textContent = "名前を入れて、今の気分に合う運勢を受け取りましょう。";
+  colorText.textContent = "占うと表示";
+  numberText.textContent = "占うと表示";
+  actionText.textContent = "占うと表示";
+
+  Object.values(resultFields).forEach((fields) => {
+    fields.title.textContent = "未鑑定";
+    fields.copy.textContent = "カードを開くと表示されます。";
+  });
+}
+
 function createReading(name) {
   const date = todayKey();
   const normalizedName = name.trim() || "ゲスト";
@@ -306,6 +323,7 @@ function renderReading(reading) {
 
 function lockForToday(reading) {
   isLockedForToday = true;
+  fortuneCard.dataset.cardState = "reading";
   countdownLabel.textContent = "次の占い";
   nameInput.disabled = true;
   drawButton.disabled = true;
@@ -324,6 +342,8 @@ function unlockForNewDay() {
   drawButton.disabled = false;
   drawButton.textContent = "今日の運勢を見る";
   formNote.textContent = "占えるのは1日1回。結果は明日まで保存されます。";
+  shareButton.disabled = true;
+  renderEmptyState();
 }
 
 function saveReading(reading) {
@@ -349,16 +369,13 @@ function loadReading() {
 
 function buildShareText() {
   return [
-    `【今日の運勢】${categoryText.textContent}`,
-    `連続占い: ${streakCount.textContent}日`,
+    "今日の運勢を占いました",
     `スコア: ${scoreValue.textContent}`,
-    `気分運: ${resultFields.mood.title.textContent} ${resultFields.mood.copy.textContent}`,
-    `仕事運: ${resultFields.work.title.textContent} ${resultFields.work.copy.textContent}`,
-    `恋愛運: ${resultFields.love.title.textContent} ${resultFields.love.copy.textContent}`,
-    `金運: ${resultFields.money.title.textContent} ${resultFields.money.copy.textContent}`,
-    `ラッキーカラー: ${colorText.textContent}`,
-    `ラッキーナンバー: ${numberText.textContent}`,
-    `今日の行動: ${actionText.textContent}`
+    `連続占い: ${streakCount.textContent}日`,
+    `今日のひとこと: ${fortuneTitle.textContent}`,
+    `今日の行動: ${actionText.textContent}`,
+    "",
+    shareUrl
   ].join("\n");
 }
 
@@ -412,5 +429,4 @@ if (savedReading) {
   lockForToday(savedReading);
 } else {
   unlockForNewDay();
-  shareButton.disabled = true;
 }
