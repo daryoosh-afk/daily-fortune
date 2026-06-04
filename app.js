@@ -84,6 +84,7 @@ const nameInput = document.querySelector("#nameInput");
 const drawButton = document.querySelector("#drawButton");
 const formNote = document.querySelector("#formNote");
 const shareButton = document.querySelector("#shareButton");
+const countdownLabel = document.querySelector("#countdownLabel");
 const countdownText = document.querySelector("#countdownText");
 const fortuneCard = document.querySelector(".fortune-card");
 const dateLine = document.querySelector("#dateLine");
@@ -97,6 +98,8 @@ const fortuneCopy = document.querySelector("#fortuneCopy");
 const colorText = document.querySelector("#colorText");
 const numberText = document.querySelector("#numberText");
 const actionText = document.querySelector("#actionText");
+
+let isLockedForToday = false;
 
 function todayKey() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -133,6 +136,10 @@ function daysBetween(previousDate, currentDate) {
 }
 
 function updateCountdown() {
+  if (!isLockedForToday) {
+    return;
+  }
+
   const remaining = Math.max(0, nextMidnight().getTime() - Date.now());
   const hours = Math.floor(remaining / 3600000);
   const minutes = Math.floor((remaining % 3600000) / 60000);
@@ -298,15 +305,21 @@ function renderReading(reading) {
 }
 
 function lockForToday(reading) {
+  isLockedForToday = true;
+  countdownLabel.textContent = "次の占い";
   nameInput.disabled = true;
   drawButton.disabled = true;
   drawButton.textContent = "今日は占い済み";
   formNote.textContent = "次に占える時間まで、今日の結果を見返せます。";
   shareButton.disabled = false;
   renderReading(reading);
+  updateCountdown();
 }
 
 function unlockForNewDay() {
+  isLockedForToday = false;
+  countdownLabel.textContent = "今日の運勢";
+  countdownText.textContent = "確かめましょう";
   nameInput.disabled = false;
   drawButton.disabled = false;
   drawButton.textContent = "今日の運勢を見る";
@@ -322,6 +335,10 @@ function loadReading() {
     const reading = JSON.parse(localStorage.getItem(storageKey));
     if (reading && reading.date === todayKey()) {
       return reading;
+    }
+
+    if (reading) {
+      localStorage.removeItem(storageKey);
     }
   } catch (error) {
     localStorage.removeItem(storageKey);
