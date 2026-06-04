@@ -33,7 +33,7 @@
           <p class="form-note" id="formNote">占えるのは1日1回。結果は明日まで保存されます。</p>
         </form>
 
-        <article class="fortune-card" aria-live="polite">
+        <article class="fortune-card" data-card-state="empty" aria-live="polite">
           <div class="card-header">
             <div>
               <div class="date-line" id="dateLine"></div>
@@ -46,29 +46,29 @@
           </div>
           <div class="score-row">
             <div class="score-ring" aria-label="総合スコア">
-              <span id="scoreValue">--</span>
+              <span id="scoreValue">★</span>
             </div>
             <div>
-              <p class="category" id="categoryText">今日</p>
-              <h2 id="fortuneTitle">名前を入れて、今日の運勢を占いましょう。</h2>
+              <p class="category" id="categoryText">今日の星</p>
+              <h2 id="fortuneTitle">今日の星をひらきましょう。</h2>
             </div>
           </div>
           <p class="fortune-copy" id="fortuneCopy">
-            気分運、仕事運、恋愛運、金運もまとめて確認できます。
+            名前を入れて、今の気分に合う運勢を受け取りましょう。
           </p>
 
           <div class="detail-grid">
             <div>
               <span>ラッキーカラー</span>
-              <strong id="colorText">-</strong>
+              <strong id="colorText">占うと表示</strong>
             </div>
             <div>
               <span>ラッキーナンバー</span>
-              <strong id="numberText">-</strong>
+              <strong id="numberText">占うと表示</strong>
             </div>
             <div>
               <span>今日の行動</span>
-              <strong id="actionText">-</strong>
+              <strong id="actionText">占うと表示</strong>
             </div>
           </div>
 
@@ -76,22 +76,22 @@
             <section class="result-card">
               <span>気分運</span>
               <h3 id="generalTitle">未鑑定</h3>
-              <p id="generalCopy">占うとここに結果が表示されます。</p>
+              <p id="generalCopy">カードを開くと表示されます。</p>
             </section>
             <section class="result-card">
               <span>仕事運</span>
               <h3 id="workTitle">未鑑定</h3>
-              <p id="workCopy">占うとここに結果が表示されます。</p>
+              <p id="workCopy">カードを開くと表示されます。</p>
             </section>
             <section class="result-card">
               <span>恋愛運</span>
               <h3 id="loveTitle">未鑑定</h3>
-              <p id="loveCopy">占うとここに結果が表示されます。</p>
+              <p id="loveCopy">カードを開くと表示されます。</p>
             </section>
             <section class="result-card">
               <span>金運</span>
               <h3 id="moneyTitle">未鑑定</h3>
-              <p id="moneyCopy">占うとここに結果が表示されます。</p>
+              <p id="moneyCopy">カードを開くと表示されます。</p>
             </section>
           </div>
 
