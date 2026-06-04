@@ -346,6 +346,7 @@ input:disabled {
 .upgrade-hint {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   margin: 8px 0 0;
   min-height: 28px;
   border: 1px solid rgba(217, 164, 65, 0.32);
@@ -356,6 +357,52 @@ input:disabled {
   font-weight: 800;
   line-height: 1.35;
   padding: 5px 9px;
+}
+
+.upgrade-hint::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.12);
+}
+
+.fortune-card[data-next-tier="glow"] .upgrade-hint::before {
+  background: linear-gradient(135deg, var(--lavender), var(--pink));
+  box-shadow: 0 0 12px rgba(169, 139, 216, 0.56);
+}
+
+.fortune-card[data-next-tier="gold"] .upgrade-hint::before {
+  background: linear-gradient(135deg, #f2c765, var(--gold));
+  box-shadow: 0 0 13px rgba(217, 164, 65, 0.58);
+}
+
+.fortune-card[data-next-tier="moon"] .upgrade-hint::before {
+  background: linear-gradient(135deg, var(--lavender), var(--accent));
+  box-shadow: 0 0 13px rgba(122, 61, 184, 0.48);
+}
+
+.fortune-card[data-next-tier="legend"] .upgrade-hint::before {
+  background: linear-gradient(135deg, #f7d77f, var(--gold), var(--accent), var(--pink));
+  box-shadow: 0 0 15px rgba(217, 164, 65, 0.62), 0 0 10px rgba(122, 61, 184, 0.34);
+}
+
+.return-nudge {
+  margin: 14px 0 0;
+  border: 1px solid rgba(169, 139, 216, 0.28);
+  border-radius: 8px;
+  background: rgba(248, 242, 255, 0.72);
+  color: var(--accent-dark);
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.55;
+  padding: 10px 12px;
+}
+
+.return-nudge[hidden] {
+  display: none;
 }
 
 .star-streak {
