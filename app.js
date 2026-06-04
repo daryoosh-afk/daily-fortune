@@ -89,6 +89,7 @@ const fortuneCard = document.querySelector(".fortune-card");
 const dateLine = document.querySelector("#dateLine");
 const streakCount = document.querySelector("#streakCount");
 const streakMessage = document.querySelector("#streakMessage");
+const upgradeHint = document.querySelector("#upgradeHint");
 const scoreValue = document.querySelector("#scoreValue");
 const categoryText = document.querySelector("#categoryText");
 const fortuneTitle = document.querySelector("#fortuneTitle");
@@ -228,10 +229,28 @@ function streakCopy(count) {
   return "星を集めると、カードが少しずつ輝きます。";
 }
 
+function nextUpgradeCopy(count) {
+  const milestones = [
+    { count: 3, label: "星が少し強く輝きます" },
+    { count: 7, label: "カードに金色の縁がつきます" },
+    { count: 14, label: "月明かりのカードに育ちます" },
+    { count: 30, label: "特別な星のカードが開きます" }
+  ];
+  const nextMilestone = milestones.find((milestone) => count < milestone.count);
+
+  if (!nextMilestone) {
+    return "最高ランクのカードです。明日の星も重ねましょう。";
+  }
+
+  const daysLeft = nextMilestone.count - count;
+  return `あと${daysLeft}日で${nextMilestone.label}。`;
+}
+
 function renderStreak(count) {
   const tier = streakTier(count);
   streakCount.textContent = count;
   streakMessage.textContent = streakCopy(count);
+  upgradeHint.textContent = nextUpgradeCopy(count);
   fortuneCard.dataset.streakTier = tier;
 }
 
