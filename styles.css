@@ -669,7 +669,7 @@ h2 {
 
 .tarot-stage {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1fr);
   gap: 18px;
   align-items: center;
   margin-top: 24px;
@@ -679,11 +679,19 @@ h2 {
   padding: 16px;
 }
 
+.tarot-spread {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  gap: 10px;
+}
+
 .tarot-card-preview {
-  width: 108px;
+  min-width: 0;
   aspect-ratio: 2 / 3;
   display: grid;
   place-items: center;
+  align-content: center;
+  gap: 7px;
   border: 2px solid rgba(217, 164, 65, 0.72);
   border-radius: 8px;
   background:
@@ -694,8 +702,57 @@ h2 {
 
 .tarot-card-preview span {
   color: #fff4cf;
-  font-size: 2.4rem;
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
   font-weight: 900;
+}
+
+.tarot-card-preview small {
+  color: #fff4cf;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.tarot-card-preview.is-empty {
+  opacity: 0.78;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.16), transparent 26%),
+    linear-gradient(160deg, #58406f, var(--accent));
+}
+
+.tarot-reading-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tarot-reading-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff9fd 100%);
+  padding: 14px;
+}
+
+.tarot-reading-card span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.tarot-reading-card h3 {
+  margin: 8px 0;
+  color: var(--accent-dark);
+}
+
+.tarot-reading-card p {
+  margin-bottom: 0;
+  color: #344054;
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.tarot-reading-card p + p {
+  margin-top: 8px;
 }
 
 .primary-wide {
@@ -800,7 +857,8 @@ h2 {
   }
 
   .tarot-menu,
-  .milestone-list {
+  .milestone-list,
+  .tarot-reading-list {
     grid-template-columns: 1fr;
   }
 }
@@ -860,8 +918,8 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  .tarot-card-preview {
-    width: 86px;
+  .tarot-spread {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .setting-row {

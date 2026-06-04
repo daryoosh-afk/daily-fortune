@@ -140,8 +140,11 @@
           </div>
 
           <div class="tarot-stage">
-            <div class="tarot-card-preview" id="tarotCardPreview" aria-label="タロットカード">
-              <span>?</span>
+            <div class="tarot-spread" id="tarotSpread" aria-label="タロットカード">
+              <div class="tarot-card-preview is-empty">
+                <span>?</span>
+                <small>カード</small>
+              </div>
             </div>
             <div>
               <p class="category" id="tarotPlanLabel">1枚カード</p>
@@ -151,6 +154,7 @@
               </p>
             </div>
           </div>
+          <div class="tarot-reading-list" id="tarotReadingList"></div>
           <button class="primary-wide" id="tarotDrawButton" type="button">カードを引く</button>
         </article>
       </section>

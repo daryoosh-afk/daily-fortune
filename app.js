@@ -34,7 +34,7 @@ const fortunes = {
     ["自然体が魅力になります。", "よく見せようと頑張りすぎるより、落ち着いた反応が安心感につながります。"],
     ["聞く姿勢に運があります。", "自分の話を急がず、相手の言葉を一つ受け止めると関係が整いやすくなります。"],
     ["距離感を大切にする日です。", "近づくことだけが正解ではなく、相手と自分のペースを守ることも優しさになります。"],
-    ["小さな約束がうれしい流れを作ります。", "大きな予定でなくても、短い連絡や軽い約束が心を近づけてくれます。"],
+    ["小な約束がうれしい流れを作ります。", "大きな予定でなくても、短い連絡や軽い約束が心を近づけてくれます。"],
     ["素直さが好印象です。", "強がるより、わかりやすく気持ちを伝えることで相手も反応しやすくなります。"],
     ["安心できる会話が鍵です。", "結論を急がず、話しやすい雰囲気を作ることが今日の恋愛運を上げてくれます。"],
     ["思いやりが巡る日です。", "自分にも相手にも少しやさしくすると、気持ちのすれ違いを減らせそうです。"]
@@ -104,10 +104,11 @@ const appViews = document.querySelectorAll(".app-view");
 const navButtons = document.querySelectorAll(".nav-button");
 const tarotOptions = document.querySelectorAll(".tarot-option");
 const tarotDrawButton = document.querySelector("#tarotDrawButton");
-const tarotCardPreview = document.querySelector("#tarotCardPreview");
+const tarotSpread = document.querySelector("#tarotSpread");
 const tarotPlanLabel = document.querySelector("#tarotPlanLabel");
 const tarotResultTitle = document.querySelector("#tarotResultTitle");
 const tarotResultCopy = document.querySelector("#tarotResultCopy");
+const tarotReadingList = document.querySelector("#tarotReadingList");
 const starPageCount = document.querySelector("#starPageCount");
 const starPageBadge = document.querySelector("#starPageBadge");
 const starPageTier = document.querySelector("#starPageTier");
@@ -115,6 +116,69 @@ const starPageHint = document.querySelector("#starPageHint");
 
 let isLockedForToday = false;
 let selectedTarotPlan = "one";
+
+const tarotCards = [
+  {
+    name: "星",
+    symbol: "星",
+    meaning: "希望、回復、未来への光",
+    advice: "すぐに答えを出すより、今信じたい方向を一つ選ぶと流れが整います。"
+  },
+  {
+    name: "月",
+    symbol: "月",
+    meaning: "迷い、不安、見えない本音",
+    advice: "はっきりしない気持ちを無理に消さず、まず何が不安なのかを言葉にしてみましょう。"
+  },
+  {
+    name: "太陽",
+    symbol: "陽",
+    meaning: "明るさ、成功、素直な喜び",
+    advice: "難しく考えすぎず、今日できる前向きな行動を一つ選ぶと結果につながりやすいです。"
+  },
+  {
+    name: "女教皇",
+    symbol: "静",
+    meaning: "直感、静かな判断、内側の答え",
+    advice: "周りの声より、自分の中で引っかかっている感覚を丁寧に見てください。"
+  },
+  {
+    name: "運命の輪",
+    symbol: "輪",
+    meaning: "転機、タイミング、流れの変化",
+    advice: "変化を止めようとするより、今来ている流れに合わせて小さく動くのが合っています。"
+  },
+  {
+    name: "力",
+    symbol: "力",
+    meaning: "忍耐、優しさ、内側の強さ",
+    advice: "強く押すより、落ち着いて向き合うことで状況を動かせます。"
+  },
+  {
+    name: "節制",
+    symbol: "整",
+    meaning: "調整、バランス、少しずつ進む",
+    advice: "一気に変えるより、無理のない量に整えることが長く続く答えになります。"
+  },
+  {
+    name: "世界",
+    symbol: "完",
+    meaning: "完成、一区切り、次の段階",
+    advice: "ここまで進めたことを認めると、次に向かう準備が自然に整います。"
+  },
+  {
+    name: "恋人",
+    symbol: "縁",
+    meaning: "選択、関係、心が動くもの",
+    advice: "正しさだけで選ばず、心が軽くなる選択肢にも目を向けてください。"
+  },
+  {
+    name: "隠者",
+    symbol: "灯",
+    meaning: "内省、距離、静かな答え",
+    advice: "少し距離を置いて考えると、本当に大事にしたいことが見えてきます。"
+  }
+];
 
 function todayKey() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -464,23 +528,64 @@ function tarotPlanName(plan) {
   return names[plan] || names.one;
 }
 
+function tarotPositions(plan) {
+  const positions = {
+    one: ["今日の答え"],
+    three: ["過去", "現在", "近い未来"],
+    six: ["状況", "本音", "障害", "助け", "行動", "結果"]
+  };
+  return positions[plan] || positions.one;
+}
+
 function tarotReading(plan) {
   const date = todayKey();
   const name = nameInput.value.trim() || "ゲスト";
   const seed = hashText(`${date}|${name}|${plan}|tarot`);
-  const cardNames = ["星", "月", "太陽", "女教皇", "運命の輪", "力", "節制", "世界"];
-  const card = pick(seed, cardNames, 3);
+  const positions = tarotPositions(plan);
+  const cards = positions.map((position, index) => {
+    const card = pick(hashText(`${seed}|${position}|${index}`), tarotCards, 2);
+    return { position, ...card };
+  });
   const copies = {
-    one: "今の流れを一言で見るなら、焦らず小さく整えることが鍵です。今日の行動に一つだけ反映すると、気持ちが進みやすくなります。",
-    three: "過去の迷い、今の選択、近い未来の変化を分けて見る鑑定です。まずは今できることを一つ決めると、次の流れが読みやすくなります。",
-    six: "状況、気持ち、相手や環境、障害、助け、近い未来を分けて整理する詳細鑑定です。結論を急がず、今の違和感を言葉にすることが助けになります。"
+    one: "今のテーマに対する短い答えです。カードの意味を今日の行動に一つだけ反映してみてください。",
+    three: "過去、現在、近い未来を分けて見る鑑定です。流れを整理して、次に取る行動を見つけます。",
+    six: "状況、本音、障害、助け、行動、結果を分けて整理する詳細鑑定です。悩みを複数の角度から見ます。"
   };
 
   return {
-    card,
-    title: `${card}のカードが出ました。`,
+    cards,
+    title: `${cards.length}枚のカードが出ました。`,
     copy: copies[plan] || copies.one
   };
+}
+
+function renderTarotPlaceholder(plan) {
+  const positions = tarotPositions(plan);
+  tarotSpread.innerHTML = positions.map((position) => `
+    <div class="tarot-card-preview is-empty">
+      <span>?</span>
+      <small>${position}</small>
+    </div>
+  `).join("");
+  tarotReadingList.innerHTML = "";
+}
+
+function renderTarotReading(reading) {
+  tarotSpread.innerHTML = reading.cards.map((card) => `
+    <div class="tarot-card-preview">
+      <span>${card.symbol}</span>
+      <small>${card.position}</small>
+    </div>
+  `).join("");
+
+  tarotReadingList.innerHTML = reading.cards.map((card) => `
+    <section class="tarot-reading-card">
+      <span>${card.position}</span>
+      <h3>${card.name}</h3>
+      <p><strong>意味:</strong> ${card.meaning}</p>
+      <p><strong>助言:</strong> ${card.advice}</p>
+    </section>
+  `).join("");
 }
 
 function selectTarotPlan(plan) {
@@ -488,7 +593,7 @@ function selectTarotPlan(plan) {
   tarotPlanLabel.textContent = tarotPlanName(plan);
   tarotResultTitle.textContent = "聞きたいテーマを心に浮かべてください。";
   tarotResultCopy.textContent = "リリース前テスト中のため、今は無料で体験できます。";
-  tarotCardPreview.querySelector("span").textContent = "?";
+  renderTarotPlaceholder(plan);
 
   tarotOptions.forEach((option) => {
     option.classList.toggle("is-selected", option.dataset.plan === plan);
@@ -497,9 +602,9 @@ function selectTarotPlan(plan) {
 
 function drawTarot() {
   const reading = tarotReading(selectedTarotPlan);
-  tarotCardPreview.querySelector("span").textContent = reading.card.slice(0, 1);
   tarotResultTitle.textContent = reading.title;
   tarotResultCopy.textContent = reading.copy;
+  renderTarotReading(reading);
 }
 
 function setTemporaryButtonText(button, text) {
@@ -558,6 +663,7 @@ tarotDrawButton.addEventListener("click", drawTarot);
 
 displayDate();
 renderStreak(loadStreak().count);
+renderTarotPlaceholder(selectedTarotPlan);
 showView("daily");
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
