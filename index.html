@@ -12,7 +12,7 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="workspace" aria-labelledby="app-title">
+      <section class="workspace app-view" data-view="daily" aria-labelledby="app-title">
         <div class="topbar">
           <div>
             <p class="eyebrow">DARI Ventures MVP</p>
@@ -103,6 +103,133 @@
           </div>
         </article>
       </section>
+
+      <section class="workspace app-view simple-view" data-view="tarot" hidden aria-labelledby="tarot-title">
+        <div class="topbar simple-topbar">
+          <div>
+            <p class="eyebrow">Deep Reading</p>
+            <h1 id="tarot-title">タロット鑑定</h1>
+          </div>
+          <div class="countdown-pill">
+            <span>テスト版</span>
+            <strong>無料体験中</strong>
+          </div>
+        </div>
+
+        <article class="feature-panel tarot-panel">
+          <div class="section-heading">
+            <p class="category">もっと深く聞きたいとき</p>
+            <h2>今日のテーマをカードで掘り下げます。</h2>
+          </div>
+          <div class="tarot-menu" id="tarotMenu" aria-label="タロット鑑定メニュー">
+            <button class="tarot-option is-selected" type="button" data-plan="one">
+              <span>1枚カード</span>
+              <strong>300円予定</strong>
+              <small>今の流れを短く確認</small>
+            </button>
+            <button class="tarot-option" type="button" data-plan="three">
+              <span>3枚スプレッド</span>
+              <strong>980円予定</strong>
+              <small>過去・現在・近い未来</small>
+            </button>
+            <button class="tarot-option" type="button" data-plan="six">
+              <span>6枚詳細鑑定</span>
+              <strong>1,500円予定</strong>
+              <small>状況を深く整理</small>
+            </button>
+          </div>
+
+          <div class="tarot-stage">
+            <div class="tarot-card-preview" id="tarotCardPreview" aria-label="タロットカード">
+              <span>?</span>
+            </div>
+            <div>
+              <p class="category" id="tarotPlanLabel">1枚カード</p>
+              <h2 id="tarotResultTitle">聞きたいテーマを心に浮かべてください。</h2>
+              <p class="fortune-copy" id="tarotResultCopy">
+                リリース前テスト中のため、今は無料で体験できます。
+              </p>
+            </div>
+          </div>
+          <button class="primary-wide" id="tarotDrawButton" type="button">カードを引く</button>
+        </article>
+      </section>
+
+      <section class="workspace app-view simple-view" data-view="stars" hidden aria-labelledby="stars-title">
+        <div class="topbar simple-topbar">
+          <div>
+            <p class="eyebrow">Star Record</p>
+            <h1 id="stars-title">星の記録</h1>
+          </div>
+          <div class="countdown-pill">
+            <span>連続占い</span>
+            <strong><span id="starPageCount">0</span>日</strong>
+          </div>
+        </div>
+
+        <article class="feature-panel star-record-panel">
+          <div class="star-record-hero">
+            <div class="star-streak record-star" aria-hidden="true">
+              <span id="starPageBadge">0</span>
+            </div>
+            <div>
+              <p class="category" id="starPageTier">普通の星</p>
+              <h2>カードは毎日の占いで少しずつ育ちます。</h2>
+              <p class="fortune-copy" id="starPageHint">今日の星を集めると進化に近づきます。</p>
+            </div>
+          </div>
+          <div class="milestone-list">
+            <div><span>3日</span><strong>星が少し強く輝く</strong></div>
+            <div><span>7日</span><strong>金色の縁がつく</strong></div>
+            <div><span>14日</span><strong>月明かりのカード</strong></div>
+            <div><span>30日</span><strong>特別な星のカード</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="workspace app-view simple-view" data-view="settings" hidden aria-labelledby="settings-title">
+        <div class="topbar simple-topbar">
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h1 id="settings-title">設定</h1>
+          </div>
+        </div>
+
+        <article class="feature-panel settings-panel">
+          <div class="setting-row">
+            <span>公開URL</span>
+            <strong>GitHub Pages</strong>
+            <a href="https://daryoosh-afk.github.io/daily-fortune/" target="_blank" rel="noreferrer">開く</a>
+          </div>
+          <div class="setting-row">
+            <span>占い回数</span>
+            <strong>1日1回</strong>
+          </div>
+          <div class="setting-row">
+            <span>保存</span>
+            <strong>端末内のみ</strong>
+          </div>
+        </article>
+      </section>
+
+      <nav class="bottom-nav" aria-label="ページ切り替え">
+        <button class="nav-button is-active" type="button" data-target-view="daily" aria-current="page">
+          <span>★</span>
+          <strong>今日</strong>
+        </button>
+        <button class="nav-button" type="button" data-target-view="tarot">
+          <span>▣</span>
+          <strong>タロット</strong>
+        </button>
+        <button class="nav-button" type="button" data-target-view="stars">
+          <span>✦</span>
+          <strong>星</strong>
+        </button>
+        <button class="nav-button" type="button" data-target-view="settings">
+          <span>⚙</span>
+          <strong>設定</strong>
+        </button>
+      </nav>
     </main>
 
     <script src="./app.js"></script>
