@@ -92,6 +92,7 @@ const dateLine = document.querySelector("#dateLine");
 const streakCount = document.querySelector("#streakCount");
 const streakMessage = document.querySelector("#streakMessage");
 const upgradeHint = document.querySelector("#upgradeHint");
+const returnNudge = document.querySelector("#returnNudge");
 const scoreValue = document.querySelector("#scoreValue");
 const categoryText = document.querySelector("#categoryText");
 const fortuneTitle = document.querySelector("#fortuneTitle");
@@ -237,29 +238,52 @@ function streakCopy(count) {
   return "星を集めると、カードが少しずつ輝きます。";
 }
 
-function nextUpgradeCopy(count) {
+function nextUpgradeInfo(count) {
   const milestones = [
-    { count: 3, label: "星が少し強く輝きます" },
-    { count: 7, label: "カードに金色の縁がつきます" },
-    { count: 14, label: "月明かりのカードに育ちます" },
-    { count: 30, label: "特別な星のカードが開きます" }
+    { count: 3, tier: "glow", label: "星が少し強く輝きます" },
+    { count: 7, tier: "gold", label: "カードに金色の縁がつきます" },
+    { count: 14, tier: "moon", label: "月明かりのカードに育ちます" },
+    { count: 30, tier: "legend", label: "特別な星のカードが開きます" }
   ];
   const nextMilestone = milestones.find((milestone) => count < milestone.count);
 
   if (!nextMilestone) {
-    return "最高ランクのカードです。明日の星も重ねましょう。";
+    return {
+      copy: "最高ランクのカードです。明日の星も重ねましょう。",
+      tier: "legend"
+    };
   }
 
   const daysLeft = nextMilestone.count - count;
-  return `あと${daysLeft}日で${nextMilestone.label}。`;
+  return {
+    copy: `あと${daysLeft}日で${nextMilestone.label}。`,
+    tier: nextMilestone.tier
+  };
+}
+
+function nextUpgradeCopy(count) {
+  return nextUpgradeInfo(count).copy;
 }
 
 function renderStreak(count) {
   const tier = streakTier(count);
+  const nextUpgrade = nextUpgradeInfo(count);
   streakCount.textContent = count;
   streakMessage.textContent = streakCopy(count);
-  upgradeHint.textContent = nextUpgradeCopy(count);
+  upgradeHint.textContent = nextUpgrade.copy;
   fortuneCard.dataset.streakTier = tier;
+  fortuneCard.dataset.nextTier = nextUpgrade.tier;
+}
+
+function renderReturnNudge(count) {
+  returnNudge.hidden = false;
+
+  if (count >= 30) {
+    returnNudge.textContent = "今日の星を重ねました。明日も開くと特別なカードが続きます。";
+    return;
+  }
+
+  returnNudge.textContent = "今日の星を受け取りました。明日も開くとカードが育ちます。";
 }
 
 function renderEmptyState() {
@@ -268,6 +292,8 @@ function renderEmptyState() {
   categoryText.textContent = "今日の星";
   fortuneTitle.textContent = "今日の星をひらきましょう。";
   fortuneCopy.textContent = "名前を入れて、今の気分に合う運勢を受け取りましょう。";
+  returnNudge.hidden = true;
+  returnNudge.textContent = "";
   colorText.textContent = "占うと表示";
   numberText.textContent = "占うと表示";
   actionText.textContent = "占うと表示";
@@ -305,6 +331,7 @@ function createReading(name) {
 
 function renderReading(reading) {
   renderStreak(reading.streak || loadStreak().count);
+  renderReturnNudge(reading.streak || loadStreak().count);
   scoreValue.textContent = reading.score;
   categoryText.textContent = `${reading.name}さんの今日の運勢`;
   fortuneTitle.textContent = reading.results.general.title;
@@ -327,8 +354,8 @@ function lockForToday(reading) {
   countdownLabel.textContent = "次の占い";
   nameInput.disabled = true;
   drawButton.disabled = true;
-  drawButton.textContent = "今日は占い済み";
-  formNote.textContent = "次に占える時間まで、今日の結果を見返せます。";
+  drawButton.textContent = "明日の星を待つ";
+  formNote.textContent = "今日の星は受け取り済み。明日も開くとカードが育ちます。";
   shareButton.disabled = false;
   renderReading(reading);
   updateCountdown();
