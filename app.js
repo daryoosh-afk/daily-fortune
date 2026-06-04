@@ -100,8 +100,21 @@ const fortuneCopy = document.querySelector("#fortuneCopy");
 const colorText = document.querySelector("#colorText");
 const numberText = document.querySelector("#numberText");
 const actionText = document.querySelector("#actionText");
+const appViews = document.querySelectorAll(".app-view");
+const navButtons = document.querySelectorAll(".nav-button");
+const tarotOptions = document.querySelectorAll(".tarot-option");
+const tarotDrawButton = document.querySelector("#tarotDrawButton");
+const tarotCardPreview = document.querySelector("#tarotCardPreview");
+const tarotPlanLabel = document.querySelector("#tarotPlanLabel");
+const tarotResultTitle = document.querySelector("#tarotResultTitle");
+const tarotResultCopy = document.querySelector("#tarotResultCopy");
+const starPageCount = document.querySelector("#starPageCount");
+const starPageBadge = document.querySelector("#starPageBadge");
+const starPageTier = document.querySelector("#starPageTier");
+const starPageHint = document.querySelector("#starPageHint");
 
 let isLockedForToday = false;
+let selectedTarotPlan = "one";
 
 function todayKey() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -265,6 +278,24 @@ function nextUpgradeCopy(count) {
   return nextUpgradeInfo(count).copy;
 }
 
+function tierLabel(tier) {
+  const labels = {
+    seed: "普通の星",
+    glow: "輝き始めた星",
+    gold: "金色のカード",
+    moon: "月明かりのカード",
+    legend: "特別な星のカード"
+  };
+  return labels[tier] || labels.seed;
+}
+
+function renderStarPage(count, tier, nextUpgrade) {
+  starPageCount.textContent = count;
+  starPageBadge.textContent = count;
+  starPageTier.textContent = tierLabel(tier);
+  starPageHint.textContent = nextUpgrade.copy;
+}
+
 function renderStreak(count) {
   const tier = streakTier(count);
   const nextUpgrade = nextUpgradeInfo(count);
@@ -273,6 +304,7 @@ function renderStreak(count) {
   upgradeHint.textContent = nextUpgrade.copy;
   fortuneCard.dataset.streakTier = tier;
   fortuneCard.dataset.nextTier = nextUpgrade.tier;
+  renderStarPage(count, tier, nextUpgrade);
 }
 
 function renderReturnNudge(count) {
@@ -406,6 +438,70 @@ function buildShareText() {
   ].join("\n");
 }
 
+function showView(viewName) {
+  appViews.forEach((view) => {
+    view.hidden = view.dataset.view !== viewName;
+  });
+
+  navButtons.forEach((button) => {
+    const isActive = button.dataset.targetView === viewName;
+    button.classList.toggle("is-active", isActive);
+
+    if (isActive) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+}
+
+function tarotPlanName(plan) {
+  const names = {
+    one: "1枚カード",
+    three: "3枚スプレッド",
+    six: "6枚詳細鑑定"
+  };
+  return names[plan] || names.one;
+}
+
+function tarotReading(plan) {
+  const date = todayKey();
+  const name = nameInput.value.trim() || "ゲスト";
+  const seed = hashText(`${date}|${name}|${plan}|tarot`);
+  const cardNames = ["星", "月", "太陽", "女教皇", "運命の輪", "力", "節制", "世界"];
+  const card = pick(seed, cardNames, 3);
+  const copies = {
+    one: "今の流れを一言で見るなら、焦らず小さく整えることが鍵です。今日の行動に一つだけ反映すると、気持ちが進みやすくなります。",
+    three: "過去の迷い、今の選択、近い未来の変化を分けて見る鑑定です。まずは今できることを一つ決めると、次の流れが読みやすくなります。",
+    six: "状況、気持ち、相手や環境、障害、助け、近い未来を分けて整理する詳細鑑定です。結論を急がず、今の違和感を言葉にすることが助けになります。"
+  };
+
+  return {
+    card,
+    title: `${card}のカードが出ました。`,
+    copy: copies[plan] || copies.one
+  };
+}
+
+function selectTarotPlan(plan) {
+  selectedTarotPlan = plan;
+  tarotPlanLabel.textContent = tarotPlanName(plan);
+  tarotResultTitle.textContent = "聞きたいテーマを心に浮かべてください。";
+  tarotResultCopy.textContent = "リリース前テスト中のため、今は無料で体験できます。";
+  tarotCardPreview.querySelector("span").textContent = "?";
+
+  tarotOptions.forEach((option) => {
+    option.classList.toggle("is-selected", option.dataset.plan === plan);
+  });
+}
+
+function drawTarot() {
+  const reading = tarotReading(selectedTarotPlan);
+  tarotCardPreview.querySelector("span").textContent = reading.card.slice(0, 1);
+  tarotResultTitle.textContent = reading.title;
+  tarotResultCopy.textContent = reading.copy;
+}
+
 function setTemporaryButtonText(button, text) {
   const originalText = button.dataset.label || button.textContent;
   button.dataset.label = originalText;
@@ -446,8 +542,23 @@ shareButton.addEventListener("click", async () => {
   setTemporaryButtonText(shareButton, "共有未対応");
 });
 
+navButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    showView(button.dataset.targetView);
+  });
+});
+
+tarotOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    selectTarotPlan(option.dataset.plan);
+  });
+});
+
+tarotDrawButton.addEventListener("click", drawTarot);
+
 displayDate();
 renderStreak(loadStreak().count);
+showView("daily");
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
