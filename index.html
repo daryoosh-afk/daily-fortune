@@ -139,6 +139,12 @@
             </button>
           </div>
 
+          <label class="tarot-question" for="tarotQuestionInput">
+            <span>聞きたいこと</span>
+            <textarea id="tarotQuestionInput" rows="3" maxlength="120" placeholder="例: 今の恋愛を進めるべきか、仕事で何を優先すべきか"></textarea>
+            <small>未入力でも鑑定できます。具体的に書くほど、カードの受け取り方を絞れます。</small>
+          </label>
+
           <div class="tarot-stage">
             <div class="tarot-spread" id="tarotSpread" aria-label="タロットカード">
               <div class="tarot-card-preview is-empty">
@@ -237,5 +243,6 @@
     </main>
 
     <script src="./app.js"></script>
+    <script src="./tarot-question-patch.js"></script>
   </body>
 </html>
