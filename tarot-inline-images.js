@@ -1,8 +1,12 @@
 (() => {
-  const assetVersion = "20260607-file1";
+  const assetVersion = "20260607-file2";
   const tarotImageMap = {
     "愚者": `./assets/tarot/fool.jpg?v=${assetVersion}`,
-    "死神": `./assets/tarot/death.jpg?v=${assetVersion}`
+    "死神": `./assets/tarot/death.jpg?v=${assetVersion}`,
+    "女教皇": `./assets/tarot/high-priestess.jpg?v=${assetVersion}`,
+    "正義": `./assets/tarot/justice.jpg?v=${assetVersion}`,
+    "吊るされた男": `./assets/tarot/hanged-man.jpg?v=${assetVersion}`,
+    "隠者": `./assets/tarot/hermit.jpg?v=${assetVersion}`
   };
 
   function ensureStyles() {
