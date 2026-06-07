@@ -16,7 +16,7 @@
   function loadInlineTarotImages() {
     if (document.querySelector('script[data-tarot-inline-images]')) return;
     const script = document.createElement('script');
-    script.src = './tarot-inline-images.js?v=20260607';
+    script.src = './tarot-inline-images.js?v=20260607-motion1';
     script.dataset.tarotInlineImages = 'true';
     document.body.appendChild(script);
   }
