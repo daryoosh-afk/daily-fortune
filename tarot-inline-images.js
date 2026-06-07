@@ -1,5 +1,5 @@
 (() => {
-  const assetVersion = "20260607-crop2";
+  const assetVersion = "20260607-crop3";
   const tarotImageMap = {
     "愚者": `./assets/tarot/fool.jpg?v=${assetVersion}`,
     "死神": `./assets/tarot/death.jpg?v=${assetVersion}`,
@@ -42,6 +42,14 @@
     document.head.appendChild(style);
   }
 
+  function loadMotionPatch() {
+    if (document.querySelector("script[data-motion-patch]")) return;
+    const script = document.createElement("script");
+    script.src = "./motion-patch.js?v=20260607-motion1";
+    script.dataset.motionPatch = "true";
+    document.body.appendChild(script);
+  }
+
   function readCardName(cardEl) {
     return (cardEl.querySelector("strong") || cardEl.querySelector(".tarot-card-nameplate span"))?.textContent?.trim();
   }
@@ -70,6 +78,7 @@
   }
 
   ensureStyles();
+  loadMotionPatch();
   upgradeTarotImages();
 
   const tarotSpread = document.querySelector("#tarotSpread");
