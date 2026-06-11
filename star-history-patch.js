@@ -13,15 +13,24 @@
     document.head.appendChild(style);
   }
 
+  function loadMotionPatch() {
+    if (document.querySelector('script[data-motion-patch]')) return;
+    const script = document.createElement('script');
+    script.src = './motion-patch.js?v=20260611-motion2';
+    script.dataset.motionPatch = 'true';
+    document.body.appendChild(script);
+  }
+
   function loadInlineTarotImages() {
     if (document.querySelector('script[data-tarot-inline-images]')) return;
     const script = document.createElement('script');
-    script.src = './tarot-inline-images.js?v=20260607-motion1';
+    script.src = './tarot-inline-images.js?v=20260611-motion2';
     script.dataset.tarotInlineImages = 'true';
     document.body.appendChild(script);
   }
 
   ensurePatchStyles();
+  loadMotionPatch();
   loadInlineTarotImages();
 
   if (!starPanel) return;
